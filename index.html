@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LookTech Serviços</title>
+
+<!-- Ícones -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Fonte e Estilo -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background: #f8f8f8;
+    color: #333;
+}
+
+/* COMMON BUTTONS */
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* HEADER */
+header {
+    background: #260244;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header h2 {
+    color: #7ed957;
+    font-weight: 700;
+    font-size: 24px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 10px 15px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    opacity: 0.7;
+}
+
+/* BOTÃO WHATSAPP FIXO */
+.zap-fixed {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #7ed957;
+    padding: 16px 20px;
+    border-radius: 50%;
+    color: #260244;
+    font-size: 28px;
+    box-shadow: 0 6px 14px rgba(37,211,102,0.5);
+    transition: 0.3s;
+    z-index: 10000;
+}
+
+.zap-fixed:hover {
+    transform: scale(1.15);
+}
+
+/* TÍTULO DAS SESSÕES */
+.titulo {
+    margin-top: 50px;
+    text-align: center;
+    font-size: 32px;
+    color: #260244;
+    font-weight: 700;
+}
+
+/* CARDS DE SERVIÇO */
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    transition: 0.5s;
+    cursor: pointer;
+    border-top: 4px solid #7ed957;
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.card i {
+    font-size: 50px;
+    color: #260244;
+    margin-bottom: 15px;
+}
+
+/* FORMULÁRIOS */
+form {
+    background: white;
+    padding: 30px;
+    max-width: 600px;
+    margin: 40px auto;
+    border-radius: 20px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 14px;
+    margin-top: 12px;
+    border-radius: 12px;
+    border: 1px solid #bbb;
+    font-size: 16px;
+}
+
+form input:focus, form textarea:focus {
+    outline: none;
+    border: 2px solid #260244;
+}
+
+form button {
+    margin-top: 18px;
+    padding: 14px;
+    width: 100%;
+    background: #260244;
+    color: white;
+    font-size: 18px;
+    border-radius: 14px;
+}
+
+form button:hover {
+    background: #7ed957;
+    color: #260244;
+}
+
+/* CHAT DO AGENTE - WIDGET */
+#chatWidget {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 300px;
+    max-height: 400px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 10001;
+    transition: transform 0.3s;
+    transform: translateY(100%);
+}
+
+#chatWidget.open {
+    transform: translateY(0);
+}
+
+#chatHeader {
+    background: #260244;
+    color: #fff;
+    padding: 10px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+#chatContainer {
+    padding: 10px;
+    flex: 1;
+    overflow-y: auto;
+    background: #f1f1f1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.mensagem-usuario, .mensagem-agente {
+    max-width: 80%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    word-wrap: break-word;
+    line-height: 1.4;
+}
+
+.mensagem-usuario {
+    background-color: #007bff;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 0;
+}
+
+.mensagem-agente {
+    background-color: #28a745;
+    color: white;
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+}
+
+#chatInput {
+    display: flex;
+    gap: 5px;
+    padding: 10px;
+    background: #eee;
+}
+
+#chatInput input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+#chatInput button {
+    padding: 8px 12px;
+    background: #260244;
+    color: white;
+    border-radius: 10px;
+}
+
+/* CONTATO */
+.contato-box {
+    text-align: center;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.contato-box p {
+    margin: 10px 0;
+    color: #555;
+}
+
+/* RODAPÉ */
+footer {
+    background: #260244;
+    padding: 25px;
+    text-align: center;
+    margin-top: 60px;
+    color: white;
+    font-size: 16px;
+}
+
+/* LOGIN / CADASTRO */
+#loginPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg,#260244,#7ed957);
+}
+
+.login-box {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+.login-box h2 {
+    text-align: center;
+    color: #260244;
+    margin-bottom: 25px;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border-radius: 10px;
+    border: 1px solid #bbb;
+    font-size: 16px;
+}
+
+.login-box button {
+    background: #260244;
+    color: white;
+    padding: 12px;
+    width: 100%;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.login-box button:hover {
+    background: #7ed957;
+    color: #260244;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.success {
+    color: green;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+    nav a {
+        margin: 5px 10px;
+    }
+    .titulo {
+        font-size: 28px;
+    }
+    .container {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+    form {
+        margin: 20px 10px;
+        padding: 20px;
+    }
+    #chatWidget {
+        width: 90%;
+        bottom: 15px;
+        right: 5%;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- BOTÃO FIXO DO WHATSAPP -->
+<a class="zap-fixed" href="https://wa.me/5524998663306" target="_blank">
+    <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<!-- LOGIN / CADASTRO -->
+<div id="loginPage">
+    <div class="login-box">
+        <h2>Cadastro / Login</h2>
+        <div id="msg"></div>
+        <input type="text" id="name" placeholder="Nome completo">
+        <input type="email" id="email" placeholder="Email">
+        <input type="tel" id="phone" placeholder="Telefone (ex: 24999863306)">
+        <input type="password" id="password" placeholder="Senha">
+        <button onclick="register()">Cadastrar</button>
+        <button onclick="login()">Entrar</button>
+    </div>
+</div>
+
+<!-- CONTEÚDO PRINCIPAL -->
+<div id="mainContent" style="display:none;">
+    <!-- HEADER -->
+    <header>
+        <h2>LookTech Serviços</h2>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#servicos">Serviços</a>
+            <a href="#agendamento">Agendar</a>
+            <a href="#contato">Contato</a>
+        </nav>
+    </header>
+
+    <!-- HOME -->
+    <section id="home" class="hero">
+        <h1>Bem-vindo(a) à LookTech!</h1>
+        <p>A LookTech oferece soluções tecnológicas modernas e acessíveis, garantindo atendimento profissional e serviços personalizados em computadores, celulares, redes e muito mais. Aqui você encontra confiança, agilidade e dedicação em cada serviço.</p>
+    </section>
+
+    <!-- SERVIÇOS -->
+    <h1 id="servicos" class="titulo">Nossos Serviços</h1>
+    <div class="container">
+        <div class="card">
+            <i class="fa-solid fa-laptop"></i>
+            <h3>Formatação Completa</h3>
+            <p>Sistema limpo, otimizado e rápido.</p>
+        </div>
+        <div class="card">
+            <i class="fa-solid fa-mobile"></i>
+            <h3>Criação de Sites e Apps</h3>
+            <p>O site e o app que sua empresa precisa.</p>
+        </div>
+        <div class="card">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+            <h3>Limpeza Interna</h3>
+            <p>Limpeza e troca de componentes.</p>
+        </div>
+        <div class="card">
+            <i class="fa-solid fa-hard-drive"></i>
+            <h3>Upgrade e Backup</h3>
+            <p>Seu PC até 10x mais rápido.</p>
+        </div>
+    </div>
+
+    <!-- AGENDAMENTO -->
+    <h1 id="agendamento" class="titulo">Agende Seu Serviço</h1>
+    <form onsubmit="sendWhatsApp(event)">
+        <input type="text" id="agName" placeholder="Seu nome" required>
+        <input type="tel" id="agPhone" placeholder="Telefone" required>
+        <input type="text" id="agService" placeholder="Serviço desejado" required>
+        <textarea id="agDesc" rows="5" placeholder="Descreva seu problema"></textarea>
+        <button type="submit">Enviar Agendamento</button>
+    </form>
+
+    <!-- CONTATO -->
+    <h1 id="contato" class="titulo">Contato</h1>
+    <div class="contato-box">
+        <p><i class="fa-solid fa-envelope"></i> looktechserviços@gmail.com</p>
+        <p><i class="fa-solid fa-phone"></i> (24) 99866-3306</p>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer>
+        © 2025 LookTech Serviços – Assistência Técnica Profissional
+    </footer>
+</div>
+
+<!-- CHAT WIDGET -->
+<div id="chatWidget">
+    <div id="chatHeader" onclick="toggleChat()">Agente Online <i id="chatArrow" class="fa-solid fa-chevron-up"></i></div>
+    <div id="chatContainer"></div>
+    <div id="chatInput">
+        <input type="text" id="mensagemInput" placeholder="Digite sua mensagem...">
+        <button onclick="enviarMensagem()"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<script>
+// Funções de Cadastro/Login
+function getUsers() {
+    return JSON.parse(localStorage.getItem('users') || '[]');
+}
+
+function register() {
+    let name = document.getElementById('name').value.trim();
+    let email = document.getElementById('email').value.trim();
+    let phone = document.getElementById('phone').value.trim();
+    let password = document.getElementById('password').value.trim();
+    let msg = document.getElementById('msg');
+
+    if(!name || !email || !phone || !password){
+        msg.innerHTML = '<p class="error">Preencha todos os campos!</p>';
+        return;
+    }
+
+    let users = getUsers();
+    if(users.find(u=>u.email===email)){
+        msg.innerHTML = '<p class="error">Email já cadastrado!</p>';
+        return;
+    }
+
+    users.push({name,email,phone,password});
+    localStorage.setItem('users', JSON.stringify(users));
+    msg.innerHTML = '<p class="success">Cadastro realizado! Agora clique em Entrar.</p>';
+}
+
+function login() {
+    let email = document.getElementById('email').value.trim();
+    let password = document.getElementById('password').value.trim();
+    let msg = document.getElementById('msg');
+
+    let users = getUsers();
+    let user = users.find(u=>u.email===email && u.password===password);
+    if(!user){
+        msg.innerHTML = '<p class="error">Email ou senha incorretos!</p>';
+        return;
+    }
+
+    localStorage.setItem('loggedUser', JSON.stringify(user));
+    showMainContent();
+}
+
+function showMainContent() {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'block';
+    let loggedUser = JSON.parse(localStorage.getItem('loggedUser'));
+    document.getElementById('agName').value = loggedUser.name;
+    document.getElementById('agPhone').value = loggedUser.phone;
+}
+
+// Se já estiver logado
+if(localStorage.getItem('loggedUser')){
+    showMainContent();
+}
+
+// Função de envio de agendamento para WhatsApp
+function sendWhatsApp(e){
+    e.preventDefault();
+    let name = document.getElementById('agName').value;
+    let phone = document.getElementById('agPhone').value;
+    let service = document.getElementById('agService').value;
+    let desc = document.getElementById('agDesc').value || 'Não informado.';
+
+    let text = `Novo agendamento!\nCliente: ${name}\nTelefone: ${phone}\nServiço: ${service}\nDescrição: ${desc}`;
+    let url = `https://wa.me/5524998663306?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+}
+
+// CHAT DO AGENTE
+const chatContainer = document.getElementById("chatContainer");
+
+async function enviarMensagem() {
+    const mensagem = document.getElementById("mensagemInput").value;
+    if (!mensagem) return;
+
+    const usuarioMsg = document.createElement("p");
+    usuarioMsg.className = "mensagem-usuario";
+    usuarioMsg.textContent = mensagem;
+    chatContainer.appendChild(usuarioMsg);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    try {
+        const res = await fetch("https://vampishly-supplest-paisley.ngrok-free.dev/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mensagem })
+        });
+
+        const data = await res.json();
+
+        const agenteMsg = document.createElement("p");
+        agenteMsg.className = "mensagem-agente";
+        agenteMsg.textContent = data.resposta + (data.chamado ? ` (${data.chamado})` : "");
+        chatContainer.appendChild(agenteMsg);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    } catch (error) {
+        const erroMsg = document.createElement("p");
+        erroMsg.className = "mensagem-agente";
+        erroMsg.style.backgroundColor = "red";
+        erroMsg.textContent = "Erro ao se comunicar com o agente.";
+        chatContainer.appendChild(erroMsg);
+        console.error(error);
+    }
+
+    document.getElementById("mensagemInput").value = "";
+}
+
+
+// ABRIR / FECHAR CHAT
+function toggleChat() {
+    const widget = document.getElementById("chatWidget");
+    const arrow = document.getElementById("chatArrow");
+    widget.classList.toggle("open");
+    arrow.classList.toggle("fa-chevron-up");
+    arrow.classList.toggle("fa-chevron-down");
+}
+</script>
+
+</body>
+</html>
+
